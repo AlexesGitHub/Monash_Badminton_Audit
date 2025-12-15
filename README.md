@@ -48,29 +48,34 @@ pip install pandas openpyxl
 Place the Python script (matchChecker.py) and your two Excel files in a single, dedicated folder (e.g., badminton-audit/).
 
 Your folder structure must look like this for the script to find the files:
+```
 badminton-audit/
 ├── matchChecker.py
-├── 202512140830_MonashBadmintonClubMembers.xlsx  <-- 2026 Registration Sheet
-└── MONASHBADDY Member Audit Sheet.xlsx           <-- 2025 Audit Sheet
+├── 202512140830_MonashBadmintonClubMembers.xlsx    <-- 2026 Registration Sheet
+├── MONASHBADDY Member Audit Sheet.xlsx             <-- 2025 Audit Sheet
+├── venv/ <-- Created in Step 2
+```
 
 ### ⚙️ Expected Sheet Setup and Column Headers
 The script relies on exact column header names for the validation logic to work. Please ensure your Excel sheets use the following headers (case-sensitive):
 
-### A. 2026 Registration Sheet (202512140830_MonashBadmintonClubMembers.xlsx)
+### A. 2026 Registration Sheet (`202512140830_MonashBadmintonClubMembers.xlsx`)
 
-Column Header,  Purpose in Script
-First Name,	    Used to create the unique Name Key for cross-referencing.
-Last Name,	    Used to create the unique Name Key for cross-referencing.
-Email,		    Used to check for the student domain (@student.monash.edu).
-Student ID,	    Used to confirm student status (must be present).
-User Type,	    Used to identify members marked as Monash Student for special cases.
+| Column Header | Purpose in Script |
+| :--- | :--- |
+| `First Name` | Used to create the unique Name Key for cross-referencing. |
+| `Last Name` | Used to create the unique Name Key for cross-referencing. |
+| `Email` | Used to check for the student domain (`@student.monash.edu`). |
+| `Student ID` | Used to confirm student status (must be present). |
+| `User Type` | Used to identify members marked as `Monash Student` for special cases. |
 
-### B. 2025 Audit Sheet (MONASHBADDY Member Audit Sheet.xlsx)
+### B. 2025 Audit Sheet (`MONASHBADDY Member Audit Sheet.xlsx`)
 
-Column Header,					Purpose in Script,Statuses Set by Script
-name,							The full name of the member (used to create the Name Key).,N/A
-On UniOne?,						[UPDATE TARGET 1] Tracks re-registration status.,"yes, no (preserves existing custom values)."
-Selected correct membership type (student/general)?,	[UPDATE TARGET 2] Tracks student verification status.,"yes, Missing Student ID, Requires Validation"
+| Column Header | Purpose in Script | Statuses Set by Script |
+| :--- | :--- | :--- |
+| `name` | The full name of the member (used to create the Name Key). | N/A |
+| `On UniOne?` | **[UPDATE TARGET 1]** Tracks re-registration status. | `yes`, `no` (preserves existing custom values). |
+| `Selected correct membership type (student/general)?` | **[UPDATE TARGET 2]** Tracks student verification status. | `yes`, `Missing Student ID`, `Requires Validation` |
 
 ### ▶️ How to Run the Script
 1. Open your terminal and navigate to the badminton-audit folder.
@@ -93,10 +98,13 @@ showing exactly which members were updated in each of the verification categorie
 (Yes, Missing Student ID, Requires Validation).
 
 ### 📝 Validation Logic Summary
+
 The script prioritizes the verification status based on the following checks for all members
 who have re-registered (On UniOne? is set to yes):
-Status Applied,		    Conditions Met (in 2026 Sheet),Priority
-Missing Student ID,	    Email is @student.monash.edu AND Student ID is missing (empty/NaN).,Highest
-Requires Validation,	User Type is Monash Student BUT the Email does NOT end in @student.monash.edu.,Medium
 
-yes,			        Email is @student.monash.edu AND Student ID is present.,Lowest (Default Success)
+| Status Applied | Conditions Met (in 2026 Sheet) | Priority |
+| :--- | :--- | :--- |
+| `Missing Student ID` | Email is `@student.monash.edu` AND Student ID is missing (empty/NaN). | Highest |
+| `Requires Validation` | User Type is `Monash Student` BUT the Email does NOT end in `@student.monash.edu`. | Medium |
+| `yes` | Email is `@student.monash.edu` AND Student ID is present. | Lowest (Default Success) |
+
