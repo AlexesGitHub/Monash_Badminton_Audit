@@ -98,4 +98,5 @@ who have re-registered (On UniOne? is set to yes):
 Status Applied,		    Conditions Met (in 2026 Sheet),Priority
 Missing Student ID,	    Email is @student.monash.edu AND Student ID is missing (empty/NaN).,Highest
 Requires Validation,	User Type is Monash Student BUT the Email does NOT end in @student.monash.edu.,Medium
+
 yes,			        Email is @student.monash.edu AND Student ID is present.,Lowest (Default Success)
